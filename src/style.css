@@ -1,0 +1,135 @@
+/* ─────────────────────────────────────────────
+   CSS Variables & Reset
+───────────────────────────────────────────── */
+:root {
+  --color-background-primary: #1e1e1e;
+  --color-background-secondary: #2d2d2d;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b0b0b0;
+  --color-text-tertiary: #888888;
+  --color-border-tertiary: #333333;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #121212; color: var(--color-text-primary); }
+.wrap { padding: 16px; max-width: 420px; margin: 0 auto; }
+
+/* ── 連線列 ── */
+.conn { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); margin-bottom: 12px; font-size: 12px; color: var(--color-text-secondary); }
+
+/* 連線燈 */
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; transition: background .3s, box-shadow .3s; }
+.dot.online  { background: #68d391; box-shadow: 0 0 8px #68d391; }
+.dot.offline { background: #fc8181; box-shadow: 0 0 8px #fc8181; }
+.dot.waiting { background: #f6ad55; box-shadow: 0 0 6px #f6ad55; }
+
+/* ── 離線彈窗 ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+.modal { background: #1e1e1e; border: 1px solid #fc8181; border-radius: 16px; padding: 24px 20px 20px; width: 100%; max-width: 300px; position: relative; }
+.modal-close { position: absolute; top: 10px; right: 12px; background: none; border: none; color: #888; font-size: 20px; cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 6px; }
+.modal-close:hover { color: #fff; background: #333; }
+.modal-icon { font-size: 36px; margin-bottom: 10px; text-align: center; }
+.modal h3 { font-size: 16px; font-weight: 600; color: #fc8181; margin-bottom: 8px; }
+.modal p { font-size: 13px; color: #b0b0b0; line-height: 1.6; }
+.modal-hint { font-size: 11px; color: #555; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid #333; }
+
+/* ── 彈窗基礎樣式 (visibility 徹底釋放點擊事件) ── */
+.rule-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.8);
+  z-index: 300; display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity .25s, visibility .25s;
+}
+.rule-overlay.show { opacity: 1; pointer-events: all; visibility: visible; }
+
+.rule-box {
+  background: #1c1200;
+  border: 1px solid #FFBF00;
+  border-radius: 8px;
+  padding: 22px 20px;
+  width: 100%; max-width: 320px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(255, 191, 0, 0.15);
+}
+.rule-title { font-size: 15px; font-weight: 700; color: #FFBF00; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.rule-text { font-size: 12px; color: #FFBF00; line-height: 1.8; margin-bottom: 20px; text-align: left; letter-spacing: 0.03em; }
+.rule-box-btn { width: 100%; min-height: 40px; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; background-color: #FFBF00; color: #1c1200; cursor: pointer; transition: transform .1s; }
+.rule-box-btn:active { transform: scale(.97); }
+
+/* ── 主版面使用規則按鈕 ── */
+.rule-btn { width: 100%; min-height: 44px; border: none; border-radius: var(--border-radius-md); font-size: 14px; font-weight: 700; background-color: #FFBF00; color: #1c1200; cursor: pointer; transition: transform .1s; }
+.rule-btn:active { transform: scale(.98); }
+
+/* ── 開發者專區底端按鈕 ── */
+.dev-zone-btn { width: 100%; background: transparent; border: 1px dashed var(--color-border-tertiary); color: var(--color-text-tertiary); min-height: 40px; border-radius: var(--border-radius-md); margin-top: 24px; font-size: 12px; cursor: pointer; font-weight: 600; transition: background .2s, color .2s; }
+.dev-zone-btn:hover { background: rgba(255,255,255,0.02); color: var(--color-text-secondary); }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; margin-bottom: 12px; }
+.clabel { font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 12px; }
+
+/* ── 租借按鈕 ── */
+.rbtn { width: 100%; min-height: 52px; border: none; border-radius: var(--border-radius-lg); font-size: 16px; font-weight: 600; color: #fff; cursor: pointer; transition: transform .1s; margin-bottom: 8px; }
+.rbtn:last-child { margin-bottom: 0; }
+.rbtn:active:not(:disabled) { transform: scale(.97); }
+.rbtn:disabled { background: var(--color-background-secondary) !important; color: var(--color-text-tertiary) !important; cursor: not-allowed; border: 0.5px solid var(--color-border-tertiary); transform: none; }
+.btn-a { background: #3182ce; }
+.btn-b { background: #38a169; }
+
+/* ── 機櫃狀態 ── */
+.box-group { margin-bottom: 10px; }
+.box-group:last-child { margin-bottom: 0; }
+.group-label { font-size: 11px; font-weight: 600; color: var(--color-text-tertiary); margin-bottom: 6px; padding-left: 2px; }
+.srow { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); margin-bottom: 6px; background: var(--color-background-secondary); }
+.srow:last-child { margin-bottom: 0; }
+.sleft { display: flex; align-items: center; gap: 10px; }
+.sinfo h3 { font-size: 13px; font-weight: 600; color: var(--color-text-primary); }
+.sinfo p { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+
+/* 機櫃指示燈 */
+.sled { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; transition: background .3s, box-shadow .3s; }
+.sled.free    { background: #68d391; box-shadow: 0 0 6px #68d391; } /* 可借 (綠) */
+.sled.busy    { background: #fc8181; box-shadow: 0 0 6px #fc8181; } /* 已借 (紅) */
+.sled.offline { background: #f6ad55; box-shadow: 0 0 6px #f6ad55; } /* 離線 (黃) */
+
+/* 物品偵測標籤 */
+.item-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+.item-present { background: rgba(72, 187, 120, 0.2); color: #48bb78; border: 0.5px solid #48bb78; }
+.item-absent  { background: rgba(229, 62, 62, 0.2);  color: #e53e3e; border: 0.5px solid #e53e3e; }
+.item-unknown { background: rgba(160, 174, 192, 0.2); color: #a0aec0; border: 0.5px solid #a0aec0; }
+
+/* ── 建議卡片 ── */
+.hot { border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 12px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); transition: .4s; }
+.hot.sa { background: rgba(49,130,206,0.15); border-color: #3182ce; }
+.hot.sb { background: rgba(56,161,105,0.15); border-color: #38a169; }
+.hot-lbl { font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 8px; }
+.hot-main { display: flex; align-items: center; gap: 12px; }
+.hbadge { width: 44px; height: 44px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--color-background-primary); color: var(--text-tertiary); flex-shrink: 0; }
+.hbadge.a { background: #2b6cb0; color: #fff; }
+.hbadge.b { background: #276749; color: #fff; }
+.hbody h2 { font-size: 15px; font-weight: 600; color: var(--color-text-primary); }
+.hbody p  { font-size: 11px; color: var(--text-secondary); margin-top: 3px; line-height: 1.5; }
+
+/* ── 統計長條 ── */
+.strow { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.strow:last-of-type { margin-bottom: 0; }
+.stn { font-size: 12px; font-weight: 600; color: var(--color-text-secondary); width: 50px; flex-shrink: 0; }
+.barbg { flex: 1; height: 8px; background: var(--color-background-secondary); border-radius: 4px; overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+.barfill { height: 100%; border-radius: 4px; transition: width .5s cubic-bezier(.4,0,.2,1); min-width: 0; }
+.fa { background: #4299e1; }
+.fb { background: #48bb78; }
+.stc { font-size: 13px; font-weight: 600; width: 24px; text-align: right; color: var(--color-text-primary); flex-shrink: 0; }
+
+/* ── 倒數 ── */
+.trow { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--color-border-tertiary); font-size: 11px; color: var(--color-text-tertiary); }
+.tbarbg  { flex: 1; height: 4px; background: var(--color-background-secondary); border-radius: 2px; overflow: hidden; }
+.tbarfill { height: 100%; background: #f6ad55; border-radius: 2px; transition: width 1s linear; }
+.tnum { flex-shrink: 0; font-variant-numeric: tabular-nums; font-size: 12px; color: #f6ad55; font-weight: 600; }
+
+/* ── Toast ── */
+.toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-70px); background: #fff; color: #1a202c; padding: 10px 18px; border-radius: var(--border-radius-lg); font-size: 13px; font-weight: 600; z-index: 99; transition: transform .3s; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.toast.show { transform: translateX(-50%) translateY(0); }

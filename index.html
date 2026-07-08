@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧租借系統 - 雙軌數據旗艦版</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<!-- ── 使用規則彈窗 ── -->
+<div class="rule-overlay" id="ruleModal">
+  <div class="rule-box">
+    <div class="rule-title">
+      <span>⚠️</span> 使用規則
+    </div>
+    <div class="rule-text">
+      櫃門開啟時請拿出物品<br>
+      歸還時只需將物品放回原位<br>
+      門會自動關閉櫃門會於開門15秒後自動關閉<br>
+      全程請勿用手推門或拉門
+    </div>
+    <button class="rule-box-btn" id="ruleConfirmBtn">我已詳閱規則</button>
+  </div>
+</div>
+
+<!-- ── 會員驗證彈窗 ── -->
+<div class="rule-overlay" id="loginModal">
+  <div class="rule-box" style="border-color: #3182ce; background: #0d1527; box-shadow: 0 4px 20px rgba(49, 130, 206, 0.2); max-width: 320px;">
+    <div class="rule-title" style="color: #4299e1; margin-bottom: 18px;">
+      <span>🔑</span> 會員帳號驗證
+    </div>
+
+    <div id="authForm">
+      <!-- 帳號輸入 -->
+      <div style="margin-bottom: 12px; text-align: left;">
+        <label style="font-size: 11px; color: #a0aec0; display: block; margin-bottom: 4px;">帳號 (限英文 / 數字組合)</label>
+        <input type="text" id="authUsername" placeholder="請輸入帳號" style="width: 100%; height: 36px; padding: 8px; background: #1a202c; border: 1px solid #4a5568; color: white; border-radius: 4px; outline: none; font-size: 13px;">
+      </div>
+
+      <!-- 密碼輸入 -->
+      <div style="margin-bottom: 20px; text-align: left;">
+        <label style="font-size: 11px; color: #a0aec0; display: block; margin-bottom: 4px;">密碼 (註冊密碼限制剛好為 8 碼)</label>
+        <input type="password" id="authPassword" placeholder="請輸入密碼" style="width: 100%; height: 36px; padding: 8px; background: #1a202c; border: 1px solid #4a5568; color: white; border-radius: 4px; outline: none; font-size: 13px;">
+      </div>
+
+      <!-- 三重動作按鈕 -->
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button class="rule-box-btn" id="loginBtn" style="background: #3182ce; color: white;">輸入完畢，立即登入</button>
+        <button class="rule-box-btn" id="registerBtn" style="background: #FFBF00; color: #1c1200; font-weight: 700;">沒帳號？立即註冊新帳號</button>
+        <!-- 以開發者身分登入按鈕 (琥珀橘空心質感) -->
+        <button class="rule-box-btn" id="devLoginBtn" style="background: transparent; border: 1.5px solid #FFBF00; color: #FFBF00; font-weight: 700;">🔑 以開發者身分登入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 開發者後台彈窗 -->
+<div class="rule-overlay" id="devModal">
+  <div class="rule-box" style="max-width: 380px; background: #1a202c; border-color: #a0aec0; box-shadow: 0 4px 20px rgba(255,255,255,0.1);">
+    <div class="rule-title" style="color: #e2e8f0; justify-content: space-between;">
+      <span>🛠️ 開發者管理專區</span>
+      <button id="closeDevBtn" style="background:none; border:none; color:#a0aec0; font-size:18px; cursor:pointer;">✕</button>
+    </div>
+
+    <!-- 按鈕垂直選單 -->
+    <div id="devMenu" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+      <button class="rule-box-btn dev-fn-btn" data-fn="accounts" style="background: #4a5568; color: white; font-size: 12px;">🔍 帳密查詢</button>
+      <button class="rule-box-btn dev-fn-btn" data-fn="logs" style="background: #4a5568; color: white; font-size: 12px;">📋 租借日誌</button>
+      <button class="rule-box-btn dev-fn-btn" data-fn="session_stats" style="background: #4a5568; color: white; font-size: 12px;">📈 本期區段統計</button>
+      <button class="rule-box-btn dev-fn-btn" data-fn="total_stats" style="background: #4a5568; color: white; font-size: 12px;">📊 歷史總量統計</button>
+      <button class="rule-box-btn dev-fn-btn" data-fn="replenish_rec" style="background: #4a5568; color: white; font-size: 12px;">💡 補貨分析建議</button>
+      <!-- 清理過期數據按鈕 -->
+      <button class="rule-box-btn" id="clearDataBtn" style="background: #9b2c2c; border: 1px solid #e53e3e; color: #fff5f5; font-size: 11px;">🧹 清理過期數據 (保留4個月)</button>
+    </div>
+
+    <!-- 點選子功能後的返回選單按鈕 -->
+    <button id="devBackBtn" class="rule-box-btn" style="display: none; background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; margin-bottom: 12px; font-size: 11px;">⬅️ 返回功能選單</button>
+
+    <!-- 資料顯示區 -->
+    <div id="devDisplayArea" style="max-height: 250px; overflow-y: auto; background: #121212; border-radius: 6px; padding: 10px; font-size: 11px; text-align: left; color: #cbd5e0; line-height: 1.6;">
+      請選擇功能
+    </div>
+  </div>
+</div>
+
+<!-- ── 離線彈窗 ── -->
+<div class="modal-overlay" id="offlineModal">
+  <div class="modal">
+    <button class="modal-close" id="closeOfflineBtn">✕</button>
+    <div class="modal-icon">📡</div>
+    <h3>機櫃目前不在線</h3>
+    <p>無法連線至機櫃控制器，租借功能暫時停用。</p>
+    <div class="modal-hint">請確認機櫃電源與 Wi-Fi 是否正常，或洽詢管理人員。</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="wrap">
+
+  <div class="conn">
+    <!-- 連線燈：預設 waiting (黃)，上線 online (綠)，斷線 offline (紅) -->
+    <div class="dot waiting" id="connDot"></div>
+    <span id="connText">連線中，等待機櫃回應...</span>
+
+    <!-- 連線列右端：登入狀態動作按鈕 -->
+    <button id="userStatusBtn" style="margin-left: auto; background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-weight: 700; transition: background 0.2s;">
+      👤 未登入
+    </button>
+  </div>
+
+  <!-- 使用規則展開按鈕 (彈窗關閉後顯示，自動推開版面) -->
+  <div id="ruleBtnContainer" style="display: none; margin-bottom: 12px;">
+    <button class="rule-btn" id="showRuleBtn">使用規則</button>
+  </div>
+
+  <div class="card">
+    <div class="clabel">選擇商品</div>
+    <button class="rbtn btn-a" id="btnA" disabled>連線中...</button>
+    <button class="rbtn btn-b" id="btnB" disabled>連線中...</button>
+  </div>
+
+  <div class="card">
+    <div class="clabel">機櫃即時狀態 (實體歸還)</div>
+    <div class="box-group">
+      <div class="group-label">A 商品櫃位</div>
+      <div class="srow">
+        <div class="sleft"><div class="sled offline" id="led1"></div><div class="sinfo"><h3>1 號櫃</h3><p id="st1">離線中</p></div></div>
+        <span class="item-badge item-unknown" id="item1">檢測中</span>
+      </div>
+      <div class="srow">
+        <div class="sleft"><div class="sled offline" id="led2"></div><div class="sinfo"><h3>2 號櫃</h3><p id="st2">離線中</p></div></div>
+        <span class="item-badge item-unknown" id="item2">檢測中</span>
+      </div>
+    </div>
+    <div class="box-group">
+      <div class="group-label">B 商品櫃位</div>
+      <div class="srow">
+        <div class="sleft"><div class="sled offline" id="led3"></div><div class="sinfo"><h3>3 號櫃</h3><p id="st3">離線中</p></div></div>
+        <span class="item-badge item-unknown" id="item3">檢測中</span>
+      </div>
+      <div class="srow">
+        <div class="sleft"><div class="sled offline" id="led4"></div><div class="sinfo"><h3>4 號櫃</h3><p id="st4">離線中</p></div></div>
+        <span class="item-badge item-unknown" id="item4">檢測中</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 開發者專區底端按鈕 -->
+  <button class="dev-zone-btn" id="devZoneBtn">🔒 開發者專區 (Demo 除錯用)</button>
+
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
